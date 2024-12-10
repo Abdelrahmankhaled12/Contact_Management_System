@@ -1,12 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWindowsForms>true</UseWindowsForms>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="Program.fs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="data\contacts.txt" />
+		<Compile Include="DeleteContact.fs" />
+		<Compile Include="AddContact.fs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Reactive.Windows.Forms" Version="6.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="Program.fs" />
+	</ItemGroup>
+
+	<ItemGroup />
 
 </Project>
