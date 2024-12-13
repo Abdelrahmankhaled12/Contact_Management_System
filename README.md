@@ -49,7 +49,7 @@ A powerful **Contact Management System** built using **F#** with a Windows Forms
 ## 📷 Screenshots
 
 ### 1. **Add Contact**
-![Add Contact](./Design/add.png)
+![Add Contact](./Design/Design.png)
 
 ### 2. **Search Contacts**
 ![Search Contacts](./Design/search.png)
