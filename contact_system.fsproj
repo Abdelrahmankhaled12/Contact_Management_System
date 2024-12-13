@@ -8,6 +8,8 @@
 
 	<ItemGroup>
 		<Content Include="data\contacts.txt" />
+		<Compile Include="EditContact.fs" />
+		<Compile Include="SearchContact.fs" />
 		<Compile Include="DeleteContact.fs" />
 		<Compile Include="AddContact.fs" />
 	</ItemGroup>
