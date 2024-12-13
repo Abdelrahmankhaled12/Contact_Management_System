@@ -1,33 +1,22 @@
 ﻿module SearchContact
 
-open System
-open System.IO
+open System.Windows.Forms
+open System.Drawing
 
-// File path to save contacts
-let filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "contacts.txt")
+let createSearchComponents (updateList: string -> unit) =
+    let searchLabel = new Label(Text = "Search for Contacts:", Width = 350, Top = 10, Left = 20, Font = new Font("Arial", 14.0f, FontStyle.Bold))
+    searchLabel.ForeColor <- Color.FromArgb(79, 70, 229)
 
-// Function to search contacts by name or phone number
-let searchContacts (query: string) =
-    if not (File.Exists(filePath)) then
-        printfn "Contacts file not found."
-    else
-        // Read all contacts from the file
-        let allContacts = File.ReadAllLines(filePath) |> Array.toList
-        
-        // Filter contacts matching the query
-        let matchingContacts = 
-            allContacts 
-            |> List.filter (fun contact -> 
-                let fields = contact.Split(',')
-                if fields.Length > 1 then 
-                    fields.[0].ToLower().Contains(query.ToLower()) || fields.[1].Contains(query)
-                else false
-            )
-        
-        // Display matching contacts
-        if matchingContacts.IsEmpty then
-            printfn "No contacts found for query: %s" query
-        else
-            printfn "Matching contacts:"
-            matchingContacts |> List.iter (printfn "%s")
+    let searchBox = new TextBox(Width = 478, Height = 28, Top = 38, Left = 25, Font = new Font("Arial", 12.0f))
+    searchBox.PlaceholderText <- "Enter contact name or phone"
 
+    let searchButton = new Button(Width = 40, Height = 28, Top = 38, Left = 500, BackColor = Color.FromArgb(245, 245, 253), FlatStyle = FlatStyle.Flat)
+    searchButton.BackgroundImage <- Image.FromFile(@"D:\contact_system\contact_system\contact_system\Icons\search.png")
+    searchButton.BackgroundImageLayout <- ImageLayout.Zoom
+    searchButton.FlatAppearance.BorderSize <- 0
+
+    searchButton.Click.Add(fun _ ->
+        updateList searchBox.Text
+    )
+
+    (searchLabel, searchBox, searchButton)

@@ -1,43 +1,46 @@
 ﻿module EditContact
 
 open System
-open System.IO
+open System.Drawing
+open System.Windows.Forms
 
-// File path to save contacts
-let filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "contacts.txt")
+let editContact (contact: string) 
+                (updateContactInFile: string -> string -> unit) 
+                (nameLabel: Label) 
+                (phoneLabel: Label) 
+                (emailLabel: Label) =
+    let editForm: Form = new Form(Text = "Edit Contact", Width = 400, Height = 300)
+    let nameInput: TextBox = new TextBox(Text = nameLabel.Text, Left = 20, Top = 20, Width = 350)
+    let phoneInput: TextBox = new TextBox(Text = phoneLabel.Text, Left = 20, Top = 70, Width = 350)
+    let emailInput: TextBox = new TextBox(Text = emailLabel.Text, Left = 20, Top = 120, Width = 350)
+    let saveButton: Button = new Button(Text = "Save", Width = 100, Height = 40, Left = 150, Top = 180, BackColor = Color.Green, ForeColor = Color.White, FlatStyle = FlatStyle.Flat)
 
-// Function to edit a contact's details by phone number
-let editContact phoneNumber newName newEmail =
-    if not (File.Exists(filePath)) then
-        printfn "Contacts file not found."
-    else
-        // Read all contacts from the file
-        let allContacts = File.ReadAllLines(filePath) |> Array.toList
+    saveButton.Click.Add(fun _ ->
+        let newName: string = nameInput.Text
+        let newPhone: string = phoneInput.Text
+        let newEmail: string = emailInput.Text
 
-        // Check if the contact exists
-        let contactExists = 
-            allContacts 
-            |> List.exists (fun contact -> 
-                let fields = contact.Split(',')
-                if fields.Length > 1 then fields.[1] = phoneNumber
-                else false
-            )
+        let isValidPhone (phone: string) =
+            phone.StartsWith("010") || phone.StartsWith("011") || phone.StartsWith("012") || phone.StartsWith("015")
+        let isValidEmail (email: string) = email.Contains("@") && email.Contains(".")
 
-        if not contactExists then
-            printfn "No contact found with phone number %s" phoneNumber
+        if String.IsNullOrWhiteSpace(newName) || String.IsNullOrWhiteSpace(newPhone) || String.IsNullOrWhiteSpace(newEmail) then
+            MessageBox.Show("All fields are required!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
+        elif not (isValidPhone newPhone) then
+            MessageBox.Show("Invalid phone number! It must start with 010, 011, 012, or 015.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
+        elif not (isValidEmail newEmail) then
+            MessageBox.Show("Invalid email address!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
         else
-            // Update the contact's details
-            let updatedContacts = 
-                allContacts 
-                |> List.map (fun contact -> 
-                    let fields = contact.Split(',')
-                    if fields.Length > 1 && fields.[1] = phoneNumber then
-                        $"{newName},{phoneNumber},{newEmail}"
-                    else
-                        contact
-                )
+            let newContact: string = $"{newName}, {newPhone}, {newEmail}"
+            updateContactInFile contact newContact
+            nameLabel.Text <- newName
+            phoneLabel.Text <- newPhone
+            emailLabel.Text <- newEmail
+            editForm.Close()
+    )
 
-            // Write updated contacts back to the file
-            File.WriteAllLines(filePath, updatedContacts)
-            printfn "Contact with phone number %s updated successfully." phoneNumber
-
+    editForm.Controls.Add(nameInput)
+    editForm.Controls.Add(phoneInput)
+    editForm.Controls.Add(emailInput)
+    editForm.Controls.Add(saveButton)
+    editForm.Show()

@@ -1,13 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<OutputType>Exe</OutputType>
+		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Content Include="Icons\edit.png" />
+		<Content Include="Icons\delete.png" />
+		<Content Include="Icons\logo.png" />
 		<Content Include="data\contacts.txt" />
+		<Content Include="Icons\search.png" />
+		<Content Include="Icons\user.png" />
 		<Compile Include="EditContact.fs" />
 		<Compile Include="SearchContact.fs" />
 		<Compile Include="DeleteContact.fs" />
@@ -21,7 +26,5 @@
 	<ItemGroup>
 		<Compile Include="Program.fs" />
 	</ItemGroup>
-
-	<ItemGroup />
 
 </Project>
