@@ -5,6 +5,7 @@ open System.Windows.Forms
 open SearchContact
 open EditContact
 open DeleteContact
+open AddContact
 
 [<EntryPoint>]
 let main argv =
@@ -81,6 +82,9 @@ let main argv =
             if String.IsNullOrWhiteSpace(filterText) then contacts
             else contacts |> List.filter (fun contact -> contact.ToLower().Contains(filterText.ToLower()))
         filteredContacts |> List.iter (fun contact -> contactsPanel.Controls.Add(createContactItem contact))
+
+    // Add Contact inputs below the logo
+    AddContact.createAddContactComponents form filePath updateList
 
     // Create search components
     let (searchLabel, searchBox, searchButton) = createSearchComponents updateList
